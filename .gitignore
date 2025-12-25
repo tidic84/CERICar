@@ -1,0 +1,53 @@
+# Yii2 Basic Project Template - .gitignore
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Composer
+/vendor/
+composer.phar
+
+# Runtime files
+/runtime/
+/web/assets/
+
+# Application config
+/config/db.php
+/config/params-local.php
+/config/web-local.php
+/config/console-local.php
+
+# Testing
+/tests/_output/
+/tests/_support/_generated
+
+# Codeception
+/codeception.yml
+
+# Vagrant
+/.vagrant/
+/vagrant/.vagrant/
+
+# NPM / Yarn (if using frontend assets)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Environment files
+.env
+.env.local
+
+# Logs
+*.log
+
+# OS generated files
+Thumbs.db
+
+# Backup files
+*.bak
+*.tmp
