@@ -35,7 +35,18 @@ class Internaute extends ActiveRecord
         return $this->pseudo;
     }
 
-    public static function getInternauteByPseudo($pseudo)
+    public function getVoyagesProposes()
+    {
+        return $this->hasMany(Voyage::class, ["conducteur" => "id"]);
+    }
+
+    public function getReservations()
+    {
+        return $this->hasMany(Reservation::class, ["voyageur" => "id"]);
+    }
+
+    // Méthode demandé
+    public static function getUserByIdentifiant($pseudo)
     {
         $internaute = self::find()
             ->where(["pseudo" => $pseudo])
@@ -49,25 +60,19 @@ class Internaute extends ActiveRecord
         }
         return $internaute;
     }
-
-    public function getVoyagesProposes()
-    {
-        return $this->hasMany(Voyage::class, ["conducteur" => "id"]);
-    }
-
-    public function getReservations()
-    {
-        return $this->hasMany(Reservation::class, ["voyageur" => "id"]);
-    }
-
-    // Méthode demandé
-    public static function getUserByIdentifiant($internauteId)
-    {
-        return self::findOne($internauteId);
-    }
     // Meme méthode mais avec un nom plus cohérant
-    public static function getInternauteById($internauteId)
+    public static function getInternauteByPseudo($pseudo)
     {
-        return self::findOne($internauteId);
+        $internaute = self::find()
+            ->where(["pseudo" => $pseudo])
+            ->one();
+        if (!$internaute) {
+            throw new ErrorException(
+                "Le pseudo \"" .
+                    $pseudo .
+                    "\" ne correspond a aucun internaute.",
+            );
+        }
+        return $internaute;
     }
 }
