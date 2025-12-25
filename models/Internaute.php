@@ -49,4 +49,14 @@ class Internaute extends ActiveRecord
         }
         return $internaute;
     }
+
+    public function getVoyagesProposes()
+    {
+        return $this->hasMany(Voyage::class, ["conducteur" => "id"]);
+    }
+
+    public function getReservations()
+    {
+        return $this->hasMany(Reservation::class, ["voyageur" => "id"]);
+    }
 }

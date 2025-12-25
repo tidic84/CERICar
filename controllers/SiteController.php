@@ -81,28 +81,21 @@ class SiteController extends Controller
 
     public function actionMapage()
     {
-        $internautes = Internaute::find()->all();
-        $marqueVehicules = MarqueVehicule::find()->all();
-        $reservations = Reservation::find()->all();
-        $trajets = Trajet::find()->all();
-        $typeVehicules = TypeVehicule::find()->all();
-        $voyages = Voyage::find()->all();
+        $test = Reservation::getReservationsByVoyageId(2);
+        $internaute = Internaute::getInternauteByPseudo("Chat");
 
-        // Préparer les données supplémentaires
-        $getTrajet = Trajet::getTrajet("Amiens", "Marseille");
-        $getVoyages = Voyage::getVoyagesByTrajetId(5);
-        $getInternaute = Internaute::getInternauteByPseudo("Fourmi");
+        $voyagesProposes = null;
+        if ($internaute->permis) {
+            $voyagesProposes = $internaute->voyagesProposes;
+        }
+
+        $reservations = $internaute->reservations;
 
         return $this->render("mapage", [
-            "internautes" => $internautes,
-            "marqueVehicules" => $marqueVehicules,
+            "internaute" => $internaute,
+            "voyagesProposes" => $voyagesProposes,
             "reservations" => $reservations,
-            "trajets" => $trajets,
-            "typeVehicules" => $typeVehicules,
-            "voyages" => $voyages,
-            "getTrajet" => $getTrajet,
-            "getVoyages" => $getVoyages,
-            "getInternaute" => $getInternaute,
+            "test" => $test,
         ]);
     }
 }

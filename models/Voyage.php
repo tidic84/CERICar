@@ -5,7 +5,6 @@ namespace app\models;
 use yii\db\ActiveRecord;
 use app\models\Internaute;
 use app\models\Trajet;
-use ErrorException;
 
 class Voyage extends ActiveRecord
 {
@@ -30,12 +29,12 @@ class Voyage extends ActiveRecord
 
     public function __toString()
     {
-        return "{ " .
+        return "{ id: " .
             $this->id .
-            ", " .
-            $this->conducteur .
-            ", " .
-            Trajet::findOne($this->trajet) .
+            ", conducteur: " .
+            $this->conducteurObj .
+            ", Trajet: " .
+            $this->trajetObj .
             " }";
     }
 
@@ -48,9 +47,7 @@ class Voyage extends ActiveRecord
                 ->all();
             return $voyages;
         } else {
-            throw new ErrorException(
-                "Le trajet \"" . $trajetId . "\" n'existe pas.",
-            );
+            return null;
         }
     }
 
@@ -62,5 +59,30 @@ class Voyage extends ActiveRecord
         }
         $result .= " ]";
         return $result;
+    }
+
+    public function getConducteurObj()
+    {
+        return $this->hasOne(Internaute::class, ["id" => "conducteur"]);
+    }
+
+    public function getTrajetObj()
+    {
+        return $this->hasOne(Trajet::class, ["id" => "trajet"]);
+    }
+
+    public function getMarqueVehiculeObj()
+    {
+        return $this->hasOne(MarqueVehicule::class, ["id" => "marquevehicule"]);
+    }
+
+    public function getTypeVehiculeObj()
+    {
+        return $this->hasOne(TypeVehicule::class, ["id" => "typevehicule"]);
+    }
+
+    public function getReservations()
+    {
+        return $this->hasMany(Reservation::class, ["voyage" => "id"]);
     }
 }
