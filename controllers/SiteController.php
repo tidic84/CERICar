@@ -81,7 +81,7 @@ class SiteController extends Controller
 
     public function actionMapage()
     {
-        $test = Reservation::getReservationsByVoyageId(2);
+        $test = Internaute::getInternauteById(11);
         $internaute = Internaute::getInternauteByPseudo("Chat");
 
         $voyagesProposes = null;

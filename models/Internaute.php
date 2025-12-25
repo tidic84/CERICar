@@ -59,4 +59,15 @@ class Internaute extends ActiveRecord
     {
         return $this->hasMany(Reservation::class, ["voyageur" => "id"]);
     }
+
+    // Méthode demandé
+    public static function getUserByIdentifiant($internauteId)
+    {
+        return self::findOne($internauteId);
+    }
+    // Meme méthode mais avec un nom plus cohérant
+    public static function getInternauteById($internauteId)
+    {
+        return self::findOne($internauteId);
+    }
 }

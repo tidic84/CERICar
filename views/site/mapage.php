@@ -13,7 +13,7 @@ $this->params["breadcrumbs"][] = $this->title;
 <div class="site-mapage">
     <div class="body-content">
         <h2> Test </h2>
-        <p> <?php echo Reservation::arrayToString($test); ?> </p>
+        <p> <?php echo $test; ?> </p>
         <h2>Informations de l'internaute : <?= $internaute->pseudo ?></h2>
           <p>Nom: <?= $internaute->nom ?></p>
           <p>Email: <?= $internaute->mail ?></p>
