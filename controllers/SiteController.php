@@ -66,7 +66,24 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render("index");
+        $depart = Yii::$app->request->get('depart');
+        $arrivee = Yii::$app->request->get('arrivee');
+        $nbpersonnes = Yii::$app->request->get('nbpersonnes');
+        $voyages = null;
+
+        if($depart && $arrivee) {
+            $trajet = Trajet::getTrajet($depart, $arrivee);
+            if($trajet) {
+                $voyages = Voyage::getVoyagesByTrajetId($trajet->id);
+            }
+        }
+
+        return $this->render('index', [
+            'voyages' => $voyages,
+            'nbpersonnes' => $nbpersonnes,
+            'depart' => $depart,
+            'arrivee' => $arrivee,
+        ]);
     }
 
     /**

@@ -82,7 +82,11 @@ class Voyage extends ActiveRecord
         foreach( $reservations as $resa ) {
             $placesreserves+= $resa->nbplaceresa;
         }
-        return $this->nbplacedispo - $placesreserves;
+        return $placesreserves;
+    }
+
+    public function getPlacesRestantes() {
+        return $this->nbplacedispo - $this->getPlacesResa();
     }
 
     public function getConducteurObj()

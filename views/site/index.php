@@ -40,9 +40,8 @@ $this->title = "CERICar - Accueil";
 
             <!-- Search Box "Ticket" -->
             <div class="bg-white border-2 border-black rounded-3xl p-6 md:p-8 max-w-5xl mx-auto shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] flex">
-                <?= Html::beginForm(["/site/recherche"], "get", [
-                    "class" => "grid md:grid-cols-4 gap-6",
-                ]) ?>
+                <?= Html::beginForm(["index"], "get", [
+                    "class" => "grid md:grid-cols-4 gap-6",]) ?>
                     <div class="space-y-2">
                         <label class="font-black text-sm uppercase flex items-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -51,7 +50,7 @@ $this->title = "CERICar - Accueil";
                             </svg>
                             Départ
                         </label>
-                        <?= Html::textInput("depart", "", [
+                        <?= Html::textInput("depart", "$depart", [
                             "placeholder" => "Ex: Paris",
                             "class" =>
                                 "w-full bg-gray-100 border-2 border-transparent focus:border-black focus:bg-white rounded-xl px-4 py-3 font-bold outline-none transition-colors",
@@ -66,7 +65,7 @@ $this->title = "CERICar - Accueil";
                             </svg>
                             Arrivée
                         </label>
-                        <?= Html::textInput("arrivee", "", [
+                        <?= Html::textInput("arrivee", "$arrivee", [
                             "placeholder" => "Ex: Toulouse",
                             "class" =>
                                 "w-full bg-gray-100 border-2 border-transparent focus:border-black focus:bg-white rounded-xl px-4 py-3 font-bold outline-none transition-colors",
@@ -82,8 +81,8 @@ $this->title = "CERICar - Accueil";
                                 Pers.
                             </label>
                             <?= Html::dropDownList(
-                                "personnes",
-                                1,
+                                "nbpersonnes",
+                                $nbpersonnes,
                                 [
                                     1 => "1",
                                     2 => "2",
@@ -110,7 +109,7 @@ $this->title = "CERICar - Accueil";
         </div>
     </div>
     <!-- Section Trajets -->
-    <section class="py-20 bg-white border-t-2 border-black">
+    <section class="<?php if(!$voyages){echo "hidden";}?> py-20 bg-white border-t-2 border-black">
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
                 <h2 class="text-4xl font-black uppercase italic">
@@ -119,22 +118,18 @@ $this->title = "CERICar - Accueil";
             </div>
 
             <div class="grid md:grid-cols-3 gap-8">
-                <!-- Trip Card -->
-                <?= \app\widgets\VoyageCard::widget([
-                    "voyage" => Voyage::findOne(1),
-                    "nbpersonnes" => 1,
-                ]) ?>
-
-                <?= \app\widgets\VoyageCard::widget([
-                    "voyage" => Voyage::findOne(2),
-                    "nbpersonnes" => 1,
-                ]) ?>
-
-                <?= \app\widgets\VoyageCard::widget([
-                    "voyage" => Voyage::findOne(4),
-                    "nbpersonnes" => 1,
-                ]) ?>
+                <?php if ($voyages !== null && count($voyages) > 0): ?>
+                    <?php foreach ($voyages as $voyage): ?>
+                        <?= \app\widgets\VoyageCard::widget([
+                            'voyage' => $voyage,
+                            'nbpersonnes' => $nbpersonnes,
+                        ]) ?>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p>Aucun voyage trouvé pour ce trajet.</p>
+                <?php endif; ?>
             </div>
+
         </div>
     </section>
 

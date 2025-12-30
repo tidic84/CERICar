@@ -16,7 +16,13 @@ class VoyageCard extends Widget
     }
     protected function renderCard($voyage, $nbpersonnes)
     {
-        $bgColor = ($voyage->nbplacedispo - $voyage->getPlacesResa()) <= 1 ? "bg-red-300" : "bg-green-300";
+        $placesRestantes = $voyage->getPlacesRestantes();
+        $bgColor = "bg-green-300";
+        if($placesRestantes == 1) {
+            $bgColor = "bg-orange-300";
+        } else if ($placesRestantes < 1) {
+            $bgColor = "bg-red-300";
+        }
 
         return <<<HTML
         <div class="bg-white border-2 border-black rounded-2xl p-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 transition-all cursor-pointer group">
@@ -39,7 +45,7 @@ class VoyageCard extends Widget
             </div>
             <div class="mt-auto flex items-center justify-between border-t-2 border-gray-100 pt-3">
                 <div class="flex items-center gap-3">
-                    <img src="{$voyage->conducteurObj->photo}" alt="Karim" class="w-10 h-10 rounded-full border-2 border-black bg-gray-200">
+                    <img src="{$voyage->conducteurObj->getProfilePicture()}" class="w-10 h-10 rounded-full border-2 border-black bg-gray-200">
                     <div class="text-sm">
                         <div class="font-bold">{$voyage->conducteurObj}</div>
                         <div class="flex items-center text-xs font-bold text-yellow-500">
@@ -50,7 +56,7 @@ class VoyageCard extends Widget
                 </div>
                 <div class="flex items-center gap-1.5 {$bgColor} border-2 border-black px-2 py-1 rounded-lg text-xs font-black uppercase tracking-wide transform -rotate-2">
                     <i class="w-3 h-3 fill-current" data-lucide="user"></i>
-                    <span>{$voyage->getPlacesResa()}/{$voyage->nbplacedispo} Places</span>
+                    <span>{$placesRestantes}/{$voyage->nbplacedispo} Places</span>
                 </div>
             </div>
         </div>

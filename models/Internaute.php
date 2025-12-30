@@ -45,6 +45,14 @@ class Internaute extends ActiveRecord
         return $this->hasMany(Reservation::class, ["voyageur" => "id"]);
     }
 
+    public function getProfilePicture() {
+        if(!$this->photo) {
+            $num = abs(crc32($this->pseudo)) % 100;
+            return "https://avatar.iran.liara.run/public/" . $num;
+        }
+        return $this->photo;
+    }
+
     // Méthode demandé
     public static function getUserByIdentifiant($pseudo)
     {
