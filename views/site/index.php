@@ -5,6 +5,104 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\models\Voyage;
+use yii\web\View;
+
+$this->registerJs("
+    (function($) {
+        $('#rechercheVoyages').on('submit', function(e) {
+            e.preventDefault();
+
+            // Récupérer seulement les champs nécessaires (sans le paramètre 'r')
+            var formData = {
+                depart: $('input[name=\"depart\"]').val(),
+                arrivee: $('input[name=\"arrivee\"]').val(),
+                nbpersonnes: $('select[name=\"nbpersonnes\"]').val()
+            };
+
+            console.log('Formulaire soumis');
+            console.log('URL:', '" . Url::to(['site/recherche-voyages']) . "');
+            console.log('Data:', formData);
+
+            $.ajax({
+                url: '" . Url::to(['site/recherche-voyages']) . "',
+                type: 'GET',
+                dataType: 'json',
+                data: formData,
+                success: function(response) {
+                    console.log('Succès! Réponse:', response);
+                    if (response.success) {
+                        var html = '';
+
+                        if (response.voyages.length > 0) {
+                            response.voyages.forEach(function(voyage) {
+                                // Déterminer la couleur selon les places restantes
+                                var bgColor = 'bg-green-300';
+                                if (voyage.placesRestantes == 1) {
+                                    bgColor = 'bg-orange-300';
+                                } else if (voyage.placesRestantes < 1) {
+                                    bgColor = 'bg-red-300';
+                                }
+
+                                // Construire le HTML de la carte
+                                html += '<div class=\"bg-white border-2 border-black rounded-2xl p-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 transition-all cursor-pointer group\">';
+                                html += '  <div class=\"h-40 rounded-xl border-2 border-black bg-pink-300 mb-4 relative overflow-hidden flex items-center justify-center\">';
+                                html += '    <img src=\"' + voyage.arriveeImg + '\">';
+                                html += '  </div>';
+                                html += '  <div class=\"flex justify-between items-start mb-4\">';
+                                html += '    <div>';
+                                html += '      <div class=\"font-bold text-lg flex items-center gap-2\">';
+                                html += '        ' + voyage.depart;
+                                html += '        <i data-lucide=\"arrow-right\"></i>';
+                                html += '        ' + voyage.arrivee;
+                                html += '      </div>';
+                                html += '      <div class=\"text-sm font-medium text-gray-500\">Demain, ' + voyage.heureDepart + '</div>';
+                                html += '    </div>';
+                                html += '    <div class=\"bg-black text-white px-3 py-1 rounded-lg font-black text-lg transform rotate-2\">';
+                                html += '      ' + voyage.prix + '€';
+                                html += '    </div>';
+                                html += '  </div>';
+                                html += '  <div class=\"mt-auto flex items-center justify-between border-t-2 border-gray-100 pt-3\">';
+                                html += '    <div class=\"flex items-center gap-3\">';
+                                html += '      <img src=\"' + voyage.conducteurPhoto + '\" class=\"w-10 h-10 rounded-full border-2 border-black bg-gray-200\">';
+                                html += '      <div class=\"text-sm\">';
+                                html += '        <div class=\"font-bold\">' + voyage.conducteurNom + '</div>';
+                                html += '        <div class=\"flex items-center text-xs font-bold text-yellow-500\">';
+                                html += '          <i class=\"w-3 h-3 fill-current\" data-lucide=\"star\"></i>';
+                                html += '          5.0';
+                                html += '        </div>';
+                                html += '      </div>';
+                                html += '    </div>';
+                                html += '    <div class=\"flex items-center gap-1.5 ' + bgColor + ' border-2 border-black px-2 py-1 rounded-lg text-xs font-black uppercase tracking-wide transform -rotate-2\">';
+                                html += '      <i class=\"w-3 h-3 fill-current\" data-lucide=\"user\"></i>';
+                                html += '      <span>' + voyage.placesRestantes + '/' + voyage.nbPlacesDispo + ' Places</span>';
+                                html += '    </div>';
+                                html += '  </div>';
+                                html += '</div>';
+                            });
+                        } else {
+                            html = '<p class=\"col-span-3 text-center text-gray-600 font-bold\">Aucun voyage trouvé pour ce trajet.</p>';
+                        }
+
+                        $('#section-resultats').removeClass('hidden');
+                        $('#resultats').html(html);
+                        lucide.createIcons();
+                    } else {
+                        $('#section-resultats').removeClass('hidden');
+                        $('#resultats').html('<p class=\"col-span-3 text-center text-red-600 font-bold\">' + response.message + '</p>');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log('Erreur complète:', xhr);
+                    console.log('Status:', status);
+                    console.log('Erreur:', error);
+                    console.log('Réponse texte:', xhr.responseText);
+                    $('#section-resultats').removeClass('hidden');
+                    $('#resultats').html('<p class=\"col-span-3 text-center text-red-600 font-bold\">Erreur: ' + error + '<br>Voir console pour détails</p>');
+                }
+            });
+        });
+    })(jQuery);
+", View::POS_READY);
 
 $this->title = "CERICar - Accueil";
 ?>
@@ -41,7 +139,9 @@ $this->title = "CERICar - Accueil";
             <!-- Search Box "Ticket" -->
             <div class="bg-white border-2 border-black rounded-3xl p-6 md:p-8 max-w-5xl mx-auto shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] flex">
                 <?= Html::beginForm(["index"], "get", [
-                    "class" => "grid md:grid-cols-4 gap-6",]) ?>
+                    "id" => "rechercheVoyages",
+                    "class" => "grid md:grid-cols-4 gap-6",
+                ]) ?>
                     <div class="space-y-2">
                         <label class="font-black text-sm uppercase flex items-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -109,7 +209,7 @@ $this->title = "CERICar - Accueil";
         </div>
     </div>
     <!-- Section Trajets -->
-    <section class="<?php if(!$voyages){echo "hidden";}?> py-20 bg-white border-t-2 border-black">
+    <section id="section-resultats" class="hidden py-20 bg-white border-t-2 border-black">
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
                 <h2 class="text-4xl font-black uppercase italic">
@@ -117,17 +217,7 @@ $this->title = "CERICar - Accueil";
                 </h2>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-8">
-                <?php if ($voyages !== null && count($voyages) > 0): ?>
-                    <?php foreach ($voyages as $voyage): ?>
-                        <?= \app\widgets\VoyageCard::widget([
-                            'voyage' => $voyage,
-                            'nbpersonnes' => $nbpersonnes,
-                        ]) ?>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p>Aucun voyage trouvé pour ce trajet.</p>
-                <?php endif; ?>
+            <div class="grid md:grid-cols-3 gap-8" id="resultats">
             </div>
 
         </div>
@@ -176,3 +266,8 @@ $this->title = "CERICar - Accueil";
             </div>
         </div>
     </section>
+
+    <script>
+
+    </script>
+</div>

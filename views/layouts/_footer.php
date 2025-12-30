@@ -27,8 +27,26 @@
             </div>
         </div>
 
-        <div class="border-t border-gray-800 pt-8 text-center text-gray-500 font-bold">
-            © 2025 CERICar Inc. - Tous droits réservés.
+        <div class="border-t border-gray-800 pt-8">
+            <div class="text-center mb-6">
+                <h4 class="font-black uppercase text-cyan-400 mb-4 tracking-wider text-sm">Sources d'inspiration</h4>
+                <div class="flex flex-wrap justify-center gap-4 text-sm">
+                    <a href="https://www.figma.com/community/file/1313507255978107786" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-cyan-400 transition-colors underline">
+                        Figma Community #1
+                    </a>
+                    <span class="text-gray-600">•</span>
+                    <a href="https://www.figma.com/community/file/1445024004618320019" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-cyan-400 transition-colors underline">
+                        Figma Community #2
+                    </a>
+                    <span class="text-gray-600">•</span>
+                    <a href="https://www.behance.net/gallery/240324815/K7-Neo-Brutalism-Ecommerce-Web-Site-UIUX-Design" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-cyan-400 transition-colors underline">
+                        K7 Neo-Brutalism (Behance)
+                    </a>
+                </div>
+            </div>
+            <div class="text-center text-gray-500 font-bold">
+                © 2025 CERICar Inc. - Tous droits réservés.
+            </div>
         </div>
     </div>
 </footer>

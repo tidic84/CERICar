@@ -71,19 +71,71 @@ class SiteController extends Controller
         $nbpersonnes = Yii::$app->request->get('nbpersonnes');
         $voyages = null;
 
-        if($depart && $arrivee) {
-            $trajet = Trajet::getTrajet($depart, $arrivee);
-            if($trajet) {
-                $voyages = Voyage::getVoyagesByTrajetId($trajet->id);
-            }
-        }
-
+        // if($depart && $arrivee) {
+        //     $trajet = Trajet::getTrajet($depart, $arrivee);
+        //     if($trajet) {
+        //         $voyages = Voyage::getVoyagesByTrajetId($trajet->id);
+        //     }
+        // }
         return $this->render('index', [
             'voyages' => $voyages,
             'nbpersonnes' => $nbpersonnes,
             'depart' => $depart,
             'arrivee' => $arrivee,
         ]);
+    }
+
+    public function actionRechercheVoyages() {
+        // Désactiver le layout et forcer le format JSON
+        $this->layout = false;
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        // Désactiver les behaviors potentiellement problématiques pour cette action
+        $this->enableCsrfValidation = false;
+
+        $depart = Yii::$app->request->get('depart');
+        $arrivee = Yii::$app->request->get('arrivee');
+        $nbpersonnes = Yii::$app->request->get('nbpersonnes', 1);
+        $voyages = [];
+
+        if($depart && $arrivee) {
+            try {
+                $trajet = Trajet::getTrajet($depart, $arrivee);
+                if($trajet) {
+                    $voyagesObjs = Voyage::getVoyagesByTrajetId($trajet->id);
+
+                    // Convertir les objets en tableaux avec toutes les données nécessaires
+                    foreach($voyagesObjs as $voyage) {
+                        $placesRestantes = $voyage->getPlacesRestantes();
+
+                        $voyages[] = [
+                            'id' => $voyage->id,
+                            'depart' => $voyage->trajetObj->depart,
+                            'arrivee' => $voyage->trajetObj->arrivee,
+                            'arriveeImg' => $voyage->trajetObj->arriveeImg(),
+                            'heureDepart' => $voyage->getFormatHeureDeDepart(),
+                            'prix' => $voyage->getPrix($nbpersonnes),
+                            'conducteurNom' => (string)$voyage->conducteurObj,
+                            'conducteurPhoto' => $voyage->conducteurObj->getProfilePicture(),
+                            'placesRestantes' => $placesRestantes,
+                            'nbPlacesDispo' => $voyage->nbplacedispo,
+                        ];
+                    }
+                }
+            } catch (\Exception $e) {
+                return [
+                    'success' => false,
+                    'message' => $e->getMessage()
+                ];
+            }
+        }
+
+        // Retourner directement le tableau - Yii2 le convertira en JSON
+        return [
+            'success' => true,
+            'voyages' => $voyages,
+            'nbpersonnes' => $nbpersonnes
+        ];
     }
 
     /**
