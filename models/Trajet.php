@@ -4,6 +4,7 @@ namespace app\models;
 
 use yii\db\ActiveRecord;
 use ErrorException;
+use app\models\Ville;
 
 class Trajet extends ActiveRecord
 {
@@ -64,5 +65,12 @@ class Trajet extends ActiveRecord
             ": " .
             $this->distance .
             "km";
+    }
+
+    public function departImg() {
+        return Ville::findOne($this->depart)->image;
+    }
+    public function arriveeImg() {
+        return Ville::findOne($this->arrivee)->image;
     }
 }

@@ -82,7 +82,7 @@ class SiteController extends Controller
     public function actionMapage()
     {
         $test = Internaute::getUserByIdentifiant("Fourmi");
-        $internaute = Internaute::getInternauteByPseudo("Chat");
+        $internaute = Internaute::getUserByIdentifiant("Chat");
 
         $voyagesProposes = null;
         if ($internaute->permis) {
@@ -97,5 +97,27 @@ class SiteController extends Controller
             "reservations" => $reservations,
             "test" => $test,
         ]);
+    }
+
+    /**
+     * Displays TailwindCSS example page.
+     *
+     * @return string
+     */
+    public function actionExempleTailwind()
+    {
+        return $this->render("exemple-tailwind");
+    }
+
+    /**
+     * Displays home page with pop design.
+     *
+     * @return string
+     */
+    public function actionHomePop()
+    {
+        // Désactiver le layout par défaut pour cette page qui a son propre style
+        $this->layout = false;
+        return $this->render("home-pop");
     }
 }

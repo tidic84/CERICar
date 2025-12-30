@@ -13,6 +13,21 @@ class Voyage extends ActiveRecord
         return "fredouil.voyage";
     }
 
+    public function getPrix($nbpersonnes) {
+        return $this->tarif * $this->trajetObj->distance * $nbpersonnes;
+    }
+
+    public function getFormatHeureDeDepart() {
+        $heuredepartformat;
+        $heure = $this->heuredepart;
+        if($heure<10) {
+            $heuredepartformat = "0". $heure . "h00";
+        } else {
+            $heuredepartformat = $heure . "h00";
+        }
+        return $heuredepartformat;
+    }
+
     public function rules()
     {
         return [];
