@@ -14,10 +14,12 @@ $this->title = "CERICar - Accueil";
     <!-- Section Barre de recherche -->
     <div class="pt-32 pb-20 bg-yellow-50 min-h-screen flex flex-col items-center relative overflow-hidden">
         <!-- Background patterns -->
-        <div class="absolute top-20 left-10 w-20 h-20 bg-purple-400 rounded-full border-2 border-black opacity-50 blur-sm"></div>
-        <div class="absolute bottom-40 right-10 w-32 h-32 bg-green-400 rounded-full border-2 border-black opacity-50 blur-sm"></div>
-        <div class="absolute top-40 right-1/4 w-12 h-12 bg-blue-400 rotate-45 border-2 border-black opacity-60"></div>
-
+        <img class="absolute top-20 left-1/4 w-40 rotate-45" src="images/polygon-3d.svg"></img>
+        <img class="absolute top-80 left-40 w-60" src="images/circle-shadow.svg"></img>
+        <img class="absolute top-10 right-1/4 w-40" src="images/rombos-shadow.svg"></img>
+        <img class="absolute top-60 right-60 w-40" src="images/rombo-shadow.svg"></img>
+        <img class="absolute bottom-40 right-10" src="images/circle-3d.svg"></img>
+        <img class="absolute -bottom-20 left-1/4" src="images/cube-3d.svg"></img>
         <div class="container mx-auto px-6 relative z-10">
             <div class="text-center max-w-4xl mx-auto mb-12">
                 <div class="inline-block mb-6 transform rotate-2">

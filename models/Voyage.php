@@ -76,6 +76,15 @@ class Voyage extends ActiveRecord
         return $result;
     }
 
+    public function getPlacesResa() {
+        $reservations = $this->reservations;
+        $placesreserves = 0;
+        foreach( $reservations as $resa ) {
+            $placesreserves+= $resa->nbplaceresa;
+        }
+        return $this->nbplacedispo - $placesreserves;
+    }
+
     public function getConducteurObj()
     {
         return $this->hasOne(Internaute::class, ["id" => "conducteur"]);
