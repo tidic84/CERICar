@@ -39,6 +39,8 @@ class SiteController extends Controller
                 "actions" => [
                     "logout" => ["post"],
                     "logout-ajax" => ["post"],
+                    "login-submit" => ["post"],
+                    "register-submit" => ["post"],
                 ],
             ],
         ];
@@ -192,9 +194,9 @@ class SiteController extends Controller
         $this->layout = false;
         Yii::$app->response->format = Response::FORMAT_JSON;
 
-        $pseudo = Yii::$app->request->get("identifiant");
-        $password = Yii::$app->request->get("password");
-        $remember = Yii::$app->request->get("remember");
+        $pseudo = Yii::$app->request->post("identifiant");
+        $password = Yii::$app->request->post("password");
+        $remember = Yii::$app->request->post("remember");
 
         if(!$pseudo || !$password) {
             return [
@@ -228,16 +230,16 @@ class SiteController extends Controller
 
         $user = new Internaute();
 
-        $user->prenom = Yii::$app->request->get("prenom");
-        $user->nom = Yii::$app->request->get("nom");
-        $user->pseudo = Yii::$app->request->get("pseudo");
-        $user->mail = Yii::$app->request->get("email");
-        $user->password_plain = Yii::$app->request->get("password");
-        $user->password_confirm = Yii::$app->request->get("passwordConfirm");
-        $user->photo = Yii::$app->request->get("photo");
-        $user->cgu = Yii::$app->request->get("cgu");
-        $user->photo = Yii::$app->request->get("photo");
-        if(Yii::$app->request->get("permis") == 1) {
+        $user->prenom = Yii::$app->request->post("prenom");
+        $user->nom = Yii::$app->request->post("nom");
+        $user->pseudo = Yii::$app->request->post("pseudo");
+        $user->mail = Yii::$app->request->post("email");
+        $user->password_plain = Yii::$app->request->post("password");
+        $user->password_confirm = Yii::$app->request->post("passwordConfirm");
+        $user->photo = Yii::$app->request->post("photo");
+        $user->cgu = Yii::$app->request->post("cgu");
+        $user->photo = Yii::$app->request->post("photo");
+        if(Yii::$app->request->post("permis") == 1) {
             $user->permis = $numeroPermis;
         }
 

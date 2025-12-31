@@ -12,7 +12,7 @@ $(document).ready(function () {
 
         $.ajax({
             url: $("#login-form").data("ajax-url"),
-            type: "GET",
+            type: "POST",
             dataType: "json",
             data: formData,
             success: function (response) {
