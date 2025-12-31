@@ -74,13 +74,6 @@ class Internaute extends ActiveRecord
         $internaute = self::find()
             ->where(["pseudo" => $pseudo])
             ->one();
-        if (!$internaute) {
-            throw new ErrorException(
-                "Le pseudo \"" .
-                    $pseudo .
-                    "\" ne correspond a aucun internaute.",
-            );
-        }
         return $internaute;
     }
 }

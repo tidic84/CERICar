@@ -15,21 +15,12 @@
                 </div>
             </a>
             <div class="grow">
-                <a href="<?= \yii\helpers\Url::to([
-                    "/site/about",
-                ]) ?>" class="font-bold hover:underline decoration-2 decoration-purple-500 underline-offset-4">Rechercher</a>
-                <a href="<?= \yii\helpers\Url::to([
-                    "/site/about",
-                ]) ?>" class="font-bold hover:underline decoration-2 decoration-purple-500 underline-offset-4">Publier</a>
-                <a href="<?= \yii\helpers\Url::to([
-                    "/site/about",
-                ]) ?>" class="font-bold hover:underline decoration-2 decoration-purple-500 underline-offset-4">Événements</a>
             </div>
             <div class="flex gap-4 ml-4">
-                <button class="font-bold border-b-2 border-transparent hover:border-black transition-all">Connexion</button>
-                <button class="font-bold border-2 border-black rounded-xl px-6 py-2 bg-black text-white shadow-[4px_4px_0px_0px_rgba(100,100,100,1)] hover:shadow-[0px_0px_0px_0px_rgba(100,100,100,1)] hover:translate-x-1 hover:translate-y-1 active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all">
+                <a href="<?= \yii\helpers\Url::to(['/site/login']) ?>" class="font-bold border-b-2 border-transparent hover:border-black transition-all duration-300 ease-in my-auto">Connexion</a>
+                <a href="<?= \yii\helpers\Url::to(['/site/register']) ?>" class="font-bold border-2 border-black rounded-xl px-6 py-2 bg-black text-white shadow-[4px_4px_0px_0px_rgba(100,100,100,1)] hover:shadow-[2px_2px_0px_0px_rgba(100,100,100,1)] hover:translate-x-0.5 hover:translate-y-0.5 active:shadow-none active:translate-x-1 active:translate-y-1 transition-all duration-150 inline-block">
                     S'inscrire
-                </button>
+                </a>
             </div>
         </div>
 
@@ -43,10 +34,10 @@
 
     <!-- Mobile Menu -->
     <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-yellow-400 border-b-2 border-black p-6 md:hidden flex-col gap-4 shadow-xl">
-        <a href="#" class="text-xl font-black block">Rechercher</a>
-        <a href="#" class="text-xl font-black block">Publier</a>
-        <button class="font-bold border-2 border-black rounded-xl px-6 py-3 bg-black text-white shadow-[4px_4px_0px_0px_rgba(100,100,100,1)] w-full">
-            Connexion
-        </button>
+        <a href="<?= \yii\helpers\Url::to(['/site/index']) ?>" class="text-xl font-black block">Rechercher</a>
+        <a href="<?= \yii\helpers\Url::to(['/site/login']) ?>" class="text-xl font-black block">Connexion</a>
+        <a href="<?= \yii\helpers\Url::to(['/site/register']) ?>" class="font-bold border-2 border-black rounded-xl px-6 py-3 bg-black text-white shadow-[4px_4px_0px_0px_rgba(100,100,100,1)] w-full block text-center">
+            S'inscrire
+        </a>
     </div>
 </nav>

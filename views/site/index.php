@@ -102,7 +102,7 @@ $this->title = "CERICar - Accueil";
                     </div>
 
                     <div class="flex items-end">
-                        <button type="submit" class="w-full font-bold border-2 border-black rounded-xl px-6 py-3 bg-yellow-400 text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-yellow-300 active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center justify-center gap-2 h-[52px] text-lg">
+                        <button type="submit" class="w-full font-bold border-2 border-black rounded-xl px-6 py-3 bg-yellow-400 text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-yellow-300 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-0.5 hover:translate-y-0.5 active:shadow-none active:translate-x-1 active:translate-y-1 transition-all duration-150 flex items-center justify-center gap-2 h-[52px] text-lg">
                             <i data-lucide="search"></i>
                             C'est parti !
                         </button>

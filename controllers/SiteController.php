@@ -145,6 +145,119 @@ class SiteController extends Controller
         return $this->render("about");
     }
 
+    public function actionRegister()
+    {
+        return $this->render("register");
+    }
+
+    public function actionLogin()
+    {
+        return $this->render("login");
+    }
+
+    public function actionLoginSubmit()
+    {
+        $this->layout = false;
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $pseudo = Yii::$app->request->get("identifiant");
+        $password = Yii::$app->request->get("password");
+        $remember = Yii::$app->request->get("remember");
+
+        if(!$pseudo || !$password) {
+            return [
+                'success' => false,
+                'message' => "Veuillez remplir tous les champs.",
+            ];
+        }
+
+        $passwordHash = sha1($password);
+
+        $user = Internaute::getInternauteByPseudo($pseudo);
+
+        if (!$user) {
+            return [
+                'success' => false,
+                'message' => "Identifiant ou mot de passe incorrect.",
+            ];
+        }
+
+        if ($user->pass !== $passwordHash) {
+            return [
+                'success' => false,
+                'message' => "Identifiant ou mot de passe incorrect.",
+            ];
+        }
+
+        Yii::$app->session->set('user_id', $user->id);
+        Yii::$app->session->set('user_pseudo', $user->pseudo);
+        Yii::$app->session->set('user_prenom', $user->prenom);
+
+        return [
+            'success' => true,
+            'message' => "Connexion réussie ! Bienvenue " . $user->prenom . " !",
+            'redirect' => Yii::$app->urlManager->createUrl(['site/index']),
+        ];
+    }
+
+    public function actionRegisterSubmit()
+    {
+        $this->layout = false;
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $prenom = Yii::$app->request->get("prenom");
+        $nom = Yii::$app->request->get("nom");
+        $pseudo = Yii::$app->request->get("pseudo");
+        $email = Yii::$app->request->get("email");
+        $password = Yii::$app->request->get("password");
+        $passwordConfirm = Yii::$app->request->get("passwordConfirm");
+        $permis = Yii::$app->request->get("permis");
+        $photo = Yii::$app->request->get("photo");
+        $numeroPermis = Yii::$app->request->get("numeroPermis");
+        $cgu = Yii::$app->request->get("cgu");
+
+        if($password != $passwordConfirm) {
+            return [
+                'success' => false,
+                'message' => "Les mot de passes dovent être identiques.",
+            ];
+        }
+
+        $internaute = Internaute::getInternauteByPseudo($pseudo);
+        if($internaute) {
+            return [
+                'success' => false,
+                'message' => "Ce pseudo est déja utilisé."
+            ];
+        }
+
+        $user = new Internaute();
+        $user->prenom = $prenom;
+        $user->nom = $nom;
+        $user->pseudo = $pseudo;
+        $user->mail = $email;
+        $user->pass = sha1($password);
+        if($photo) {
+            $user->photo=$photo;
+        }
+        if($permis == 1) {
+            $user->permis = $numeroPermis;
+        }
+
+        if ($user->save()) {
+            return [
+                'success' => true,
+                'message' => "Inscription réussie ! Bienvenue " . $user->prenom . " !",
+                'redirect' => Yii::$app->urlManager->createUrl(['site/index']),
+            ];
+        } else {
+            return [
+                'success' => false,
+                'message' => "Erreur : " . $user->errors,
+            ];
+        }
+    }
+
     public function actionMapage()
     {
         $test = Internaute::getUserByIdentifiant("Fourmi");
@@ -163,27 +276,5 @@ class SiteController extends Controller
             "reservations" => $reservations,
             "test" => $test,
         ]);
-    }
-
-    /**
-     * Displays TailwindCSS example page.
-     *
-     * @return string
-     */
-    public function actionExempleTailwind()
-    {
-        return $this->render("exemple-tailwind");
-    }
-
-    /**
-     * Displays home page with pop design.
-     *
-     * @return string
-     */
-    public function actionHomePop()
-    {
-        // Désactiver le layout par défaut pour cette page qui a son propre style
-        $this->layout = false;
-        return $this->render("home-pop");
     }
 }
