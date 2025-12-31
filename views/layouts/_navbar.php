@@ -2,7 +2,6 @@
 <nav class="absolute w-full z-50 border-black py-4">
     <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
 
-
         <!-- Desktop Menu -->
         <div class="hidden md:flex items-center grow">
             <!-- Logo -->

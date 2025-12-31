@@ -171,27 +171,16 @@ class SiteController extends Controller
             ];
         }
 
-        $passwordHash = sha1($password);
-
         $user = Internaute::getInternauteByPseudo($pseudo);
 
-        if (!$user) {
+        if (!$user || !$user->validatePassword($password)) {
             return [
                 'success' => false,
                 'message' => "Identifiant ou mot de passe incorrect.",
             ];
         }
 
-        if ($user->pass !== $passwordHash) {
-            return [
-                'success' => false,
-                'message' => "Identifiant ou mot de passe incorrect.",
-            ];
-        }
-
-        Yii::$app->session->set('user_id', $user->id);
-        Yii::$app->session->set('user_pseudo', $user->pseudo);
-        Yii::$app->session->set('user_prenom', $user->prenom);
+        $user->login();
 
         return [
             'success' => true,
@@ -205,42 +194,18 @@ class SiteController extends Controller
         $this->layout = false;
         Yii::$app->response->format = Response::FORMAT_JSON;
 
-        $prenom = Yii::$app->request->get("prenom");
-        $nom = Yii::$app->request->get("nom");
-        $pseudo = Yii::$app->request->get("pseudo");
-        $email = Yii::$app->request->get("email");
-        $password = Yii::$app->request->get("password");
-        $passwordConfirm = Yii::$app->request->get("passwordConfirm");
-        $permis = Yii::$app->request->get("permis");
-        $photo = Yii::$app->request->get("photo");
-        $numeroPermis = Yii::$app->request->get("numeroPermis");
-        $cgu = Yii::$app->request->get("cgu");
-
-        if($password != $passwordConfirm) {
-            return [
-                'success' => false,
-                'message' => "Les mot de passes dovent être identiques.",
-            ];
-        }
-
-        $internaute = Internaute::getInternauteByPseudo($pseudo);
-        if($internaute) {
-            return [
-                'success' => false,
-                'message' => "Ce pseudo est déja utilisé."
-            ];
-        }
-
         $user = new Internaute();
-        $user->prenom = $prenom;
-        $user->nom = $nom;
-        $user->pseudo = $pseudo;
-        $user->mail = $email;
-        $user->pass = sha1($password);
-        if($photo) {
-            $user->photo=$photo;
-        }
-        if($permis == 1) {
+
+        $user->prenom = Yii::$app->request->get("prenom");
+        $user->nom = Yii::$app->request->get("nom");
+        $user->pseudo = Yii::$app->request->get("pseudo");
+        $user->mail = Yii::$app->request->get("email");
+        $user->password_plain = Yii::$app->request->get("password");
+        $user->password_confirm = Yii::$app->request->get("passwordConfirm");
+        $user->photo = Yii::$app->request->get("photo");
+        $user->cgu = Yii::$app->request->get("cgu");
+        $user->photo = Yii::$app->request->get("photo");
+        if(Yii::$app->request->get("permis") == 1) {
             $user->permis = $numeroPermis;
         }
 
@@ -253,7 +218,7 @@ class SiteController extends Controller
         } else {
             return [
                 'success' => false,
-                'message' => "Erreur : " . $user->errors,
+                'message' => "Erreur : " . $user->errorsToString(),
             ];
         }
     }
