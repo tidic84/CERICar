@@ -50,6 +50,8 @@ $this->registerLinkTag([
 
 <?= $this->render("/layouts/_navbar") ?>
 
+<div id="notification-container" class="fixed top-20 right-6 z-50 space-y-4" style="max-width: 400px;"></div>
+
 <main id="main" class="flex-1 pt-16 bg-yellow-50 " role="main">
     <div class="mx-auto min-h-screen items-center relative overflow-hidden">
         <?= $content ?>

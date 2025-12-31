@@ -86,17 +86,14 @@ class SiteController extends Controller
     }
 
     public function actionRechercheVoyages() {
-        // Désactiver le layout et forcer le format JSON
         $this->layout = false;
         Yii::$app->response->format = Response::FORMAT_JSON;
-
-        // Désactiver les behaviors potentiellement problématiques pour cette action
-        $this->enableCsrfValidation = false;
 
         $depart = Yii::$app->request->get('depart');
         $arrivee = Yii::$app->request->get('arrivee');
         $nbpersonnes = Yii::$app->request->get('nbpersonnes', 1);
         $voyages = [];
+        $nbVoyages = 0;
 
         if($depart && $arrivee) {
             try {
@@ -104,10 +101,9 @@ class SiteController extends Controller
                 if($trajet) {
                     $voyagesObjs = Voyage::getVoyagesByTrajetId($trajet->id);
 
-                    // Convertir les objets en tableaux avec toutes les données nécessaires
                     foreach($voyagesObjs as $voyage) {
                         $placesRestantes = $voyage->getPlacesRestantes();
-
+                        $nbVoyages++;
                         $voyages[] = [
                             'id' => $voyage->id,
                             'depart' => $voyage->trajetObj->depart,
@@ -130,11 +126,12 @@ class SiteController extends Controller
             }
         }
 
-        // Retourner directement le tableau - Yii2 le convertira en JSON
+        $pluriel = $nbVoyages > 1 ? 's' : '';
         return [
             'success' => true,
             'voyages' => $voyages,
-            'nbpersonnes' => $nbpersonnes
+            'nbpersonnes' => $nbpersonnes,
+            'message' => $nbVoyages . " voyage". $pluriel . " trouvé" . $pluriel . " pour " . $depart . " → " . $arrivee,
         ];
     }
 
