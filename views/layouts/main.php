@@ -48,7 +48,10 @@ $this->registerLinkTag([
 <body class="min-h-screen font-sans text-black bg-white selection:bg-purple-300 selection:text-purple-900">
 <?php $this->beginBody(); ?>
 
-<?= $this->render("/layouts/_navbar") ?>
+<?= $this->render("/layouts/_navbar", [
+    'currentUser' => $this->params['currentUser'] ?? null,
+    'isLoggedIn' => $this->params['isLoggedIn'] ?? false,
+]) ?>
 
 <div id="notification-container" class="fixed top-20 right-6 z-50 space-y-4" style="max-width: 400px;"></div>
 
@@ -64,7 +67,6 @@ $this->registerLinkTag([
 <script>
 lucide.createIcons();
 </script>
-
 
 <?php $this->endBody(); ?>
 </body>

@@ -39,14 +39,14 @@ $this->title = "CERICar - Connexion";
                 'data-ajax-url' => Url::to(['site/login-submit'])
             ]) ?>
 
-                <!-- Email ou Pseudo -->
+                <!-- Pseudo -->
                 <div class="space-y-2">
                     <label class="font-black text-sm uppercase flex items-center gap-2">
                         <i data-lucide="user" class="w-4 h-4"></i>
-                        Email ou Pseudo
+                        Pseudo
                     </label>
                     <?= Html::textInput('identifiant', '', [
-                        'placeholder' => 'votre@email.com ou pseudo',
+                        'placeholder' => 'Pseudo',
                         'required' => true,
                         'class' => 'w-full bg-gray-100 border-2 border-transparent focus:border-purple-600 focus:bg-white rounded-xl px-4 py-3 font-bold outline-none transition-colors'
                     ]) ?>

@@ -4,9 +4,9 @@ namespace app\controllers;
 
 use Yii;
 use yii\filters\AccessControl;
-use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
+use yii\web\Controller;
 
 use app\models\Internaute;
 use app\models\MarqueVehicule;
@@ -38,6 +38,7 @@ class SiteController extends Controller
                 "class" => VerbFilter::class,
                 "actions" => [
                     "logout" => ["post"],
+                    "logout-ajax" => ["post"],
                 ],
             ],
         ];
@@ -57,6 +58,17 @@ class SiteController extends Controller
                 "fixedVerifyCode" => YII_ENV_TEST ? "testme" : null,
             ],
         ];
+    }
+
+    public function beforeAction($action)
+    {
+        if (parent::beforeAction($action)) {
+            // Définir currentUser dans les paramètres de la vue
+            $this->view->params['currentUser'] = Internaute::getCurrentUser();
+            $this->view->params['isLoggedIn'] = Internaute::isLoggedIn();
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -81,7 +93,7 @@ class SiteController extends Controller
             'voyages' => $voyages,
             'nbpersonnes' => $nbpersonnes,
             'depart' => $depart,
-            'arrivee' => $arrivee,
+            'arrivee' => $arrivee
         ]);
     }
 
@@ -153,6 +165,26 @@ class SiteController extends Controller
     public function actionLogin()
     {
         return $this->render("login");
+    }
+
+    public function actionLogout()
+    {
+        Internaute::logout();
+        return $this->redirect(['site/index']);
+    }
+
+    public function actionLogoutAjax()
+    {
+        $this->layout = false;
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        Internaute::logout();
+
+        return [
+            'success' => true,
+            'message' => 'Déconnexion réussie ! À bientôt !',
+            'redirect' => Yii::$app->urlManager->createUrl(['site/index']),
+        ];
     }
 
     public function actionLoginSubmit()

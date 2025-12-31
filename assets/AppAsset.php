@@ -27,6 +27,7 @@ class AppAsset extends AssetBundle
         'js/recherche-voyages.js',
         'js/register.js',
         'js/login.js',
+        'js/logout.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

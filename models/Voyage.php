@@ -14,7 +14,7 @@ class Voyage extends ActiveRecord
     }
 
     public function getPrix($nbpersonnes) {
-        return $this->tarif * $this->trajetObj->distance * $nbpersonnes;
+        return round($this->tarif * $this->trajetObj->distance * $nbpersonnes, 2);
     }
 
     public function getFormatHeureDeDepart() {

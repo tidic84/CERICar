@@ -4,9 +4,10 @@ namespace app\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\web\IdentityInterface;
 use ErrorException;
 
-class Internaute extends ActiveRecord
+class Internaute extends ActiveRecord implements IdentityInterface
 {
     public $password_plain;
     public $password_confirm;
@@ -96,28 +97,50 @@ class Internaute extends ActiveRecord
         return $this->pass === sha1($password);
     }
 
-    public function login()
+    public static function findIdentity($id)
     {
-        Yii::$app->session->set('internaute_id', $this->id);
+        return static::findOne($id);
+    }
+
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        return null;
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function getAuthKey()
+    {
+        return md5($this->id . $this->pseudo . $this->mail);
+    }
+
+    public function validateAuthKey($authKey)
+    {
+        return $this->getAuthKey() === $authKey;
+    }
+
+
+    public function login($duration = 0)
+    {
+        return Yii::$app->user->login($this, $duration);
     }
 
     public static function logout()
     {
-        Yii::$app->session->remove('internaute_id');
+        return Yii::$app->user->logout();
     }
 
     public static function getCurrentUser()
     {
-        $userId = Yii::$app->session->get('internaute_id');
-        if ($userId) {
-            return self::findOne($userId);
-        }
-        return null;
+        return Yii::$app->user->identity;
     }
 
     public static function isLoggedIn()
     {
-        return Yii::$app->session->has('internaute_id');
+        return !Yii::$app->user->isGuest;
     }
 
     public function errorsToString() {
