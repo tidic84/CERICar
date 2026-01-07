@@ -24,6 +24,7 @@ class AppAsset extends AssetBundle
     ];
     public $js = [
         'js/notification.js',
+        'js/voyage-modal.js',
         'js/recherche-voyages.js',
         'js/register.js',
         'js/login.js',
@@ -32,5 +33,9 @@ class AppAsset extends AssetBundle
     public $depends = [
         'yii\web\YiiAsset',
         'yii\web\JqueryAsset',
+    ];
+    public $jsOptions = ['position' => \yii\web\View::POS_END];
+    public $publishOptions = [
+        'forceCopy' => true,
     ];
 }

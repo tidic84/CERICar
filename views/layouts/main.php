@@ -53,7 +53,15 @@ $this->registerLinkTag([
     'isLoggedIn' => $this->params['isLoggedIn'] ?? false,
 ]) ?>
 
+<script>
+    window.isUserLoggedIn = <?= json_encode($this->params['isLoggedIn'] ?? false) ?>;
+    window.currentUser = <?= json_encode($this->params['currentUser']) ?>;
+    window.urlGetVoyageDetails = <?= json_encode(\yii\helpers\Url::to(['site/get-voyage-details'])) ?>;
+    window.urlReserver = <?= json_encode(\yii\helpers\Url::to(['site/reserver'])) ?>;
+</script>
+
 <div id="notification-container" class="fixed top-20 right-6 z-50 space-y-4" style="max-width: 400px;"></div>
+<div id="voyage-modal-container"></div>
 
 <main id="main" class="flex-1 pt-16 bg-yellow-50 " role="main">
     <div class="mx-auto min-h-screen items-center relative overflow-hidden">
